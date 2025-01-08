@@ -17,7 +17,16 @@ async function delayTime(ms) {
   for (const account of accounts) {
     const { username, password, panelnum } = account;
 
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({
+      headless: true,  // 改为 true，因为在 CI 环境中不需要显示界面
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu'
+      ]
+    });
     const page = await browser.newPage();
 
     let url = `https://panel${panelnum}.serv00.com/login/?next=/`;
